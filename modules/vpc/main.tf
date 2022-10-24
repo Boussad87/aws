@@ -19,7 +19,7 @@ resource "aws_subnet" "boussad_public_subnet" {
 }
 
 # PRIVATE SUBNETS
-resource "aws_subnet" "boussad_privaye_subnet" {
+resource "aws_subnet" "boussad_private_subnet" {
   count                   = 2
   vpc_id                  = aws_vpc.boussad_vpc.id
   cidr_block = var.private_subnet_cidr[count.index]
@@ -46,14 +46,17 @@ resource "aws_route_table" "boussad_public_route" {
 
 # ROUTE ASSOCIATION PUBLIC
 resource "aws_route_table_association" "public_association" {
-  count: 2
+  count= 2
   subnet_id = aws_subnet.boussad_public_subnet[count.index].id
   route_table_id = aws_route_table.boussad_public_route.id
 }
 
+resource "aws_eip" "nat" {
+  vpc = true
+
 # NAT GATEWAY
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.example.id
+  allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.boussad_public_subnet[0].id
   depends_on = [aws_internet_gateway.boussad_gw]
 }
@@ -72,7 +75,7 @@ resource "aws_route_table" "boussad_private_route" {
 
 # ROUTE ASSOCIATION PRIVATE
 resource "aws_route_table_association" "private_association" {
-  count: 2
+  count= 2
   subnet_id = aws_subnet.boussad_private_subnet[count.index].id
   route_table_id = aws_route_table.boussad_private_route.id
 }

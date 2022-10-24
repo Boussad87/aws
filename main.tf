@@ -13,13 +13,13 @@ module "my_vpc" {
 }
 
 module "my_s3" {
-    source                  = "./modules/s3"
+    source                  = "./modules/S3"
     bucket_name             = "boussad-S3"
     path_folder_content     = "./src/"
 }
 
 module "my_ec2_role_allow_s3" {
-    source                  = "./modules/ec2_role_allow_s3"
+    source                  = "./modules/ec2_role_S3"
     name                    = "devops"
     bucket_name             = "boussad-S3"
 }
